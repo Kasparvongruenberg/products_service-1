@@ -21,7 +21,7 @@ class Product(models.Model):
 
 
 class Property(models.Model):
-    product = models.ManyToManyField(Product, blank=True, null=True)
+    product = models.ManyToManyField(Product, blank=True)
     name = models.CharField(max_length=255, help_text="Dynamic Field name for additional meta definition of a product")
     type = models.CharField(max_length=255, blank=True, null=True, help_text="Type of field")
     value = models.CharField(max_length=255, help_text="Dynamic Field value for additional meta definition of a product")
