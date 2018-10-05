@@ -1,0 +1,4 @@
+-r base.txt
+
+django-cors-headers==2.4.0
+gunicorn==19.9.0

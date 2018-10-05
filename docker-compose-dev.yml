@@ -1,0 +1,52 @@
+version: "3.1"
+
+services:
+
+  postgres_products_service:
+    container_name: postgres_products_service
+    healthcheck:
+      test: "pg_isready -h localhost -p 5432 -q -U postgres"
+      interval: 3s
+      timeout: 5s
+      retries: 5
+    image: postgres:10.4
+    environment:
+      POSTGRES_DB: products_service
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - /var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    restart: always
+
+  products_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: bash /code/run-standalone-dev.sh
+    container_name: products_service
+    image: products_service
+    volumes:
+      - .:/code
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_products_service
+    environment:
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      CORS_ORIGIN_WHITELIST: localhost,127.0.0.1
+      DATABASE_ENGINE: "postgresql"
+      DATABASE_NAME: "products_service"
+      DATABASE_USER: "root"
+      DATABASE_PASSWORD: "root"
+      DATABASE_HOST: "postgres_products_service"
+      DATABASE_PORT: "5432"
+      DEBUG: "True"
+      DOCUMENTATION_URL: "https://github.com/humanitec/StandardizationDocs/"
+      API_URL: "/api/docs"
+      JWT_PUBLIC_KEY_RSA_ACTIVITYAPI: |-
+        -----BEGIN PUBLIC KEY-----
+        MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALFc9NFZaOaSwUMPNektbtJqEjYZ6IRB
+        qhqvJu1hKPYn9HYd75c0gIDYHJ9lb7QwQvg44aO27104rDK0xSstzL0CAwEAAQ==
+        -----END PUBLIC KEY-----

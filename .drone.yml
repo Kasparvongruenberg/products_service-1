@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:10.4
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db
+
+pipeline:
+  clone:
+    image: plugins/git:next
+  test:
+    image: python:3.7
+    commands:
+      - pip install -r requirements/ci.txt
+      - cat .flake8
+      - flake8 .
+      - bash tcp-port-wait.sh $${DATABASE_HOST} $${DATABASE_PORT}
+      - coverage run --source='.' manage.py test -v 2
+      - coverage report -m
+      - python manage.py makemigrations --check --dry-run
+    environment:
+      - DATABASE_ENGINE=postgresql
+      - DATABASE_NAME=db
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+    when:
+      event: [pull_request, push, tag]
+  build-docker-image-tag:
+    image: plugins/docker
+    insecure: true
+    registry: registry.tola.io
+    repo: registry.tola.io/prodcuts_service/products_service
+    file: Dockerfile
+    auto_tag: true
+    secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
+    when:
+      event: [tag]
+      status: [success]
