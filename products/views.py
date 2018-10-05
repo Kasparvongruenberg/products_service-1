@@ -52,7 +52,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_fields = ('type', 'name')
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     queryset = rules.Product.objects.all()
-    serializer_class = serializer.ProducstSerializer
+    serializer_class = serializer.ProductSerializer
 
 
 class PropertyViewSet(viewsets.ModelViewSet):
