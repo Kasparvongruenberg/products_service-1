@@ -4,11 +4,7 @@ pipeline:
     image: python:${PYTHON_VERSION}
     commands:
       - pip install -r requirements/ci.txt
-      - cat .flake8
-      - flake8 .
       - bash tcp-port-wait.sh postgres 5432
-      - coverage run --source='.' manage.py test -v 2
-      - coverage report -m
       - python manage.py makemigrations --check --dry-run
     when:
       event: [pull_request, push, tag]
