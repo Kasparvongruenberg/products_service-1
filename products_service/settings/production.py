@@ -13,7 +13,11 @@ MIDDLEWARE_CORS = [
 
 MIDDLEWARE = MIDDLEWARE_CORS + MIDDLEWARE
 
-CORS_ORIGIN_WHITELIST = os.environ['CORS_ORIGIN_WHITELIST'].split(',')
+
+try:
+    CORS_ORIGIN_WHITELIST = os.environ['CORS_ORIGIN_WHITELIST'].split(',')
+except KeyError:
+    CORS_ORIGIN_WHITELIST = []
 
 
 # Security
