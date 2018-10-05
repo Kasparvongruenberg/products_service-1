@@ -1,5 +1,5 @@
 # products_service
-Humanitec LogicModule backend service for products
+Humanitec LogicModule backend service for products and inventory
 ## Development
 
 Build the image:
