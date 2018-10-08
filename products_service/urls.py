@@ -23,6 +23,7 @@ from rest_framework.documentation import include_docs_urls
 router = routers.SimpleRouter()
 
 router.register(r'api/products', views.ProductViewSet)
+router.register(r'api/property', views.PropertyViewSet)
 router.register(r'api/groups', views.ProductViewSet)
 
 urlpatterns = [
