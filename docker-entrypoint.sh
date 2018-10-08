@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# It is responsibility of the deployment orchestration to execute before
-# migrations, collect static files, create default admin user, etc.
-
-#!/bin/bash
-
 echo $(date -u) "- Migrating"
 python manage.py migrate
 
