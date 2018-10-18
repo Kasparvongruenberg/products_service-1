@@ -16,8 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
-from products import views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 from rest_framework import permissions, routers
+
+from products import views
+
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -45,3 +49,5 @@ urlpatterns = [
         name='schema-swagger-ui'),
     url(r'^api/', include(router.urls))
 ]
+
+urlpatterns += staticfiles_urlpatterns()
