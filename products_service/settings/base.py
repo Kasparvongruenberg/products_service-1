@@ -43,6 +43,7 @@ INSTALLED_APPS_THIRD_PARTIES = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'drf_yasg',
 
     # Health check
     'health_check',
@@ -154,15 +155,12 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'oauth2_provider_jwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'products.permissions.IsSuperUserBrowseableAPI',
-    )
 }
 
 # JWT Configuration
 
 JWT_AUTH_DISABLED = True
 JWT_ALLOWED_ISSUER = 'bifrost'
-JWT_PUBLIC_KEY_RSA_ACTIVITYAPI = os.getenv('JWT_PUBLIC_KEY_RSA_ACTIVITYAPI')
+JWT_PUBLIC_KEY_RSA_BIFROST = os.getenv('JWT_PUBLIC_KEY_RSA_BIFROST')
 
 API_URL = os.getenv('API_URL')
