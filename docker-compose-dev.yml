@@ -44,7 +44,7 @@ services:
       DATABASE_PORT: "5432"
       DEBUG: "True"
       DOCUMENTATION_URL: "https://github.com/humanitec/StandardizationDocs/"
-      API_URL: "/api/docs"
+      API_URL: "/docs"
       JWT_PUBLIC_KEY_RSA_BIFROST: |-
         -----BEGIN PUBLIC KEY-----
         MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALFc9NFZaOaSwUMPNektbtJqEjYZ6IRB
