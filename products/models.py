@@ -4,7 +4,7 @@ import uuid
 
 # Create your models here.
 class Product(models.Model):
-    workflowlevel2_uuid = models.CharField(max_length=255, editable=False, verbose_name='WorkflowLevel2 UUID', default=uuid.uuid4, unique=True, blank=True, help_text="Unique ID to relate back to Bifrost workflow")
+    workflowlevel2_uuid = models.CharField(max_length=255, verbose_name='WorkflowLevel2 UUID', default=uuid.uuid4, unique=True, blank=True, help_text="Unique ID to relate back to Bifrost workflow")
     name = models.CharField(max_length=255, help_text="Product name")
     make = models.CharField(max_length=255, help_text="Who made the product",blank=True, null=True)
     model = models.CharField(max_length=255, help_text="What is the model from the manufacturer",blank=True, null=True)
