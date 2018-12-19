@@ -35,7 +35,7 @@ services:
       - postgres_products_service
     environment:
       ALLOWED_HOSTS: localhost,127.0.0.1
-      CORS_ORIGIN_WHITELIST: localhost,127.0.0.1
+      CORS_ORIGIN_WHITELIST: localhost,127.0.0.1,localhost:4200
       DATABASE_ENGINE: "postgresql"
       DATABASE_NAME: "products_service"
       DATABASE_USER: "root"
