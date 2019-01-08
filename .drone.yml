@@ -28,12 +28,13 @@ pipeline:
     image: plugins/docker
     insecure: true
     registry: registry.tola.io
-    repo: registry.tola.io/humanitec/products_service
+    repo: registry.tola.io/humanitec-walhall/products_service
     file: Dockerfile
     auto_tag: true
     secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
     when:
-      event: [tag]
+      event: [push, tag]
+      branch: [master]
       status: [success]
 
 services:
