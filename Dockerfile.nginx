@@ -1,0 +1,6 @@
+FROM nginx:stable-alpine
+
+# In order to make this work, we need to collect before all static files in the
+# project's dir.
+
+COPY ./static /usr/share/nginx/html/static
