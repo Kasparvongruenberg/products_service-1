@@ -154,7 +154,7 @@ REST_FRAMEWORK = {
         'oauth2_provider_jwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'api.permissions.AllowOptionsAuthentication',
+        'products.permissions.AllowOptionsAuthentication',
     )
 }
 
