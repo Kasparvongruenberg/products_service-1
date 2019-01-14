@@ -9,22 +9,20 @@ services:
       interval: 3s
       timeout: 5s
       retries: 5
-    image: postgres:10.4
+    image: postgres:10.4-alpine
     environment:
       POSTGRES_DB: products_service
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     volumes:
       - /var/lib/postgresql/data/
-    ports:
-      - "5432:5432"
     restart: always
 
   products_service:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: bash /code/run-standalone-dev.sh
+    entrypoint: bash /code/docker-entrypoint-dev.sh
     container_name: products_service
     image: products_service
     volumes:
@@ -35,7 +33,7 @@ services:
       - postgres_products_service
     environment:
       ALLOWED_HOSTS: localhost,127.0.0.1
-      CORS_ORIGIN_WHITELIST: localhost,127.0.0.1
+      CORS_ORIGIN_WHITELIST: localhost,127.0.0.1,localhost:4200
       DATABASE_ENGINE: "postgresql"
       DATABASE_NAME: "products_service"
       DATABASE_USER: "root"
@@ -43,8 +41,6 @@ services:
       DATABASE_HOST: "postgres_products_service"
       DATABASE_PORT: "5432"
       DEBUG: "True"
-      DOCUMENTATION_URL: "https://github.com/humanitec/StandardizationDocs/"
-      API_URL: "/api/docs"
       JWT_PUBLIC_KEY_RSA_BIFROST: |-
         -----BEGIN PUBLIC KEY-----
         MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALFc9NFZaOaSwUMPNektbtJqEjYZ6IRB

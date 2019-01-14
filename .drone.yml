@@ -1,26 +1,25 @@
----
-pipeline:
-  test:
-    image: python:${PYTHON_VERSION}
-    commands:
-      - pip install -r requirements/ci.txt
-      - bash tcp-port-wait.sh postgres 5432
-      - python manage.py makemigrations --check --dry-run
-    when:
-      event: [pull_request, push, tag]
+services:
+  postgres:
+    image: postgres:10.4-alpine
     environment:
-      DATABASE_ENGINE: "postgresql"
-      DATABASE_NAME: "db"
-      DATABASE_USER: "root"
-      DATABASE_PASSWORD: "root"
-      DATABASE_HOST: "postgres"
-      DATABASE_PORT: "5432"
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db
 
-  bandit:
-    image: python:${PYTHON_VERSION}
+pipeline:
+
+  test:
+    image: python:3.6
     commands:
-      - pip install bandit
-      - bandit -x tests/ -r -lll .
+      - bash scripts/tcp-port-wait.sh $${DATABASE_HOST} $${DATABASE_PORT}
+      - bash scripts/run-tests.sh --ci
+    environment:
+      - DATABASE_ENGINE=postgresql
+      - DATABASE_NAME=db
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
     when:
       event: [pull_request, push, tag]
 
@@ -28,24 +27,11 @@ pipeline:
     image: plugins/docker
     insecure: true
     registry: registry.tola.io
-    repo: registry.tola.io/humanitec/products_service
+    repo: registry.tola.io/humanitec-walhall/products_service
     file: Dockerfile
     auto_tag: true
     secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
     when:
-      event: [tag]
+      event: [push, tag]
+      branch: [master]
       status: [success]
-
-services:
-  postgres:
-    image: postgres:${POSTGRESQL_VERSION}
-    environment:
-      POSTGRES_DB: "db"
-      POSTGRES_USER: "root"
-      POSTGRES_PASSWORD: "root"
-
-matrix:
-  PYTHON_VERSION:
-    - 3.7
-  POSTGRESQL_VERSION:
-    - 10.4

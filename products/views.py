@@ -32,8 +32,9 @@ class DefaultCursorPagination(CursorPagination):
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
-    Product viewset is used to create list or inventory of products or THINGS to be
-    tracked and related to a project
+    Product viewset is used to create list or inventory of products or THINGS
+    to be tracked and related to a project.
+
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
     """
@@ -49,7 +50,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    filter_fields = ('type', 'name')
+    filter_fields = ('type', 'name', 'workflowlevel2_uuid')
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     queryset = rules.Product.objects.all()
     serializer_class = serializer.ProductSerializer
@@ -57,8 +58,9 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 class PropertyViewSet(viewsets.ModelViewSet):
     """
-    A property is a subset of product that can be allocated to provide additional
-    meta descriptions about the product
+    A property is a subset of product that can be allocated to provide
+    additional meta descriptions about the product.
+
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
     """

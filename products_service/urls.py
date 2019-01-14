@@ -14,8 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.conf.urls import url, include
+from django.urls import include, path, re_path
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from rest_framework import permissions, routers
@@ -43,12 +42,12 @@ router.register(r'groups', views.ProductViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^api/docs/swagger(?P<format>\.json|\.yaml)$',
-        schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    url(r'^api/docs/$', schema_view.with_ui('swagger', cache_timeout=0),
-        name='schema-swagger-ui'),
-    url(r'^api/', include(router.urls)),
-    url(r'^health_check/', include('health_check.urls')),
+    re_path(r'^docs/swagger(?P<format>\.json|\.yaml)$',
+            schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0),
+         name='schema-swagger-ui'),
+    path('', include(router.urls)),
+    path('health_check/', include('health_check.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
