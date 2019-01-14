@@ -155,6 +155,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'oauth2_provider_jwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'api.permissions.AllowOptionsAuthentication',
+    )
 }
 
 # JWT Configuration
