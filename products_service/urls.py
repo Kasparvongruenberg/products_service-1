@@ -18,9 +18,9 @@ from django.urls import include, path, re_path
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from rest_framework import permissions, routers
-
 from products import views
 
+# openapi implementation
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 

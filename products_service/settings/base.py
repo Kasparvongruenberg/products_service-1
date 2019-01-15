@@ -153,6 +153,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'oauth2_provider_jwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'products.permissions.AllowOptionsAuthentication',
+    )
 }
 
 # JWT Configuration
@@ -161,3 +164,8 @@ JWT_AUTH_DISABLED = True
 JWT_PUBLIC_KEY_RSA_BIFROST = os.getenv('JWT_PUBLIC_KEY_RSA_BIFROST')
 
 API_URL = os.getenv('API_URL')
+
+# JWT Configuration
+
+JWT_ALLOWED_ISSUER = 'activityapi'
+JWT_PUBLIC_KEY_RSA_ACTIVITYAPI = os.getenv('JWT_PUBLIC_KEY_RSA_ACTIVITYAPI')
