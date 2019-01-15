@@ -98,7 +98,7 @@ DATABASES = {
         'USER': os.environ['DATABASE_USER'],
         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
         'HOST': os.getenv('DATABASE_HOST', 'localhost'),
-        'PORT': os.environ['DATABASE_PORT'],        
+        'PORT': os.environ['DATABASE_PORT'],
     }
 }
 
@@ -161,11 +161,7 @@ REST_FRAMEWORK = {
 # JWT Configuration
 
 JWT_AUTH_DISABLED = True
+JWT_ALLOWED_ISSUER = 'bifrost'
 JWT_PUBLIC_KEY_RSA_BIFROST = os.getenv('JWT_PUBLIC_KEY_RSA_BIFROST')
 
 API_URL = os.getenv('API_URL')
-
-# JWT Configuration
-
-JWT_ALLOWED_ISSUER = 'activityapi'
-JWT_PUBLIC_KEY_RSA_ACTIVITYAPI = os.getenv('JWT_PUBLIC_KEY_RSA_ACTIVITYAPI')
