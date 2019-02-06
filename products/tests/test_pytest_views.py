@@ -1,5 +1,5 @@
 """pytest unit tests, to run:
-DJANGO_SETTINGS_MODULE=products_service.settings.base py.test -v --cov
+DJANGO_SETTINGS_MODULE=products_service.settings.base pytest -v --cov
 """
 
 import uuid

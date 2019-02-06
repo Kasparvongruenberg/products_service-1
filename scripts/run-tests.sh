@@ -81,16 +81,16 @@ if [ $? -eq 1 ] && [ "$bash_on_finish" = true ]; then
 fi
 
 if [ "$ci" = true ] ; then
-    coverage run --source='.' manage.py test -v 2
+    pytest -v --cov
     if [ $? -eq 1 ] && [ "$bash_on_finish" = true ]; then
         bash_on_failure
     fi
     coverage report -m
 else
     if [ "$keepdb" = true ] ; then
-        python manage.py test -v 2 --keepdb
+        pytest -v --reuse-db
     else
-        python manage.py test -v 2
+        pytest -v
     fi
     if [ $? -eq 1 ] && [ "$bash_on_finish" = true ]; then
         bash_on_failure

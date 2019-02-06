@@ -41,6 +41,7 @@ services:
       DATABASE_HOST: "postgres_products_service"
       DATABASE_PORT: "5432"
       DEBUG: "True"
+      DJANGO_SETTINGS_MODULE: "products_service.settings.base"
       JWT_PUBLIC_KEY_RSA_BIFROST: |-
         -----BEGIN PUBLIC KEY-----
         MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALFc9NFZaOaSwUMPNektbtJqEjYZ6IRB
