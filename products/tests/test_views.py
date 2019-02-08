@@ -15,30 +15,6 @@ class ProductViewsBaseTest(TestCase):
         self.user = model_factories.User()
 
 
-class ProductDetailTest(ProductViewsBaseTest):
-
-    def test_product_detail(self):
-        product = model_factories.ProductFactory.create()
-
-        request = self.factory.get('')
-        request.user = self.user
-        response = ProductViewSet.as_view({'get': 'retrieve'})(request,
-                                                               pk=product.pk)
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.data)
-
-        self.assertEqual(response.data['id'], product.pk)
-        self.assertTrue('name' in response.data)
-        self.assertTrue('workflowlevel2_uuid' in response.data)
-
-    def test_nonexistent_product(self):
-        request = self.factory.get('')
-        request.user = self.user
-        response = ProductViewSet.as_view({'get': 'retrieve'})(request,
-                                                               pk=1001)
-        self.assertEqual(response.status_code, 404)
-
-
 class ProductCreateTest(ProductViewsBaseTest):
 
     def test_create_product(self):
@@ -91,7 +67,7 @@ class ProductUpdateTest(ProductViewsBaseTest):
         request = self.factory.put('', data)
         request.user = self.user
         response = ProductViewSet.as_view({'put': 'update'})(request,
-                                                             pk=product.pk)
+                                                             uuid=product.uuid)
         self.assertEqual(response.status_code, 200)
 
         product = Product.objects.get(id=response.data['id'])
@@ -107,7 +83,7 @@ class ProductUpdateTest(ProductViewsBaseTest):
         request = self.factory.put('', data)
         request.user = self.user
         response = ProductViewSet.as_view({'put': 'update'})(request,
-                                                             pk=product.pk)
+                                                             uuid=product.uuid)
         self.assertEqual(response.status_code, 400)
 
 

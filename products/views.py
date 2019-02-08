@@ -1,13 +1,12 @@
-import uuid
-
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import CursorPagination, PageNumberPagination
 import django_filters
-from . import models as rules
-from . import serializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+
+from . import models as rules
+from . import serializer
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -44,15 +43,6 @@ class ProductViewSet(viewsets.ModelViewSet):
     # Remove CSRF request verification for posts to this API
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
-        if 'pk' in kwargs:
-            # check if URL argument either ID or UUID
-            try:
-                uuid.UUID(kwargs['pk'], version=4)
-            except (ValueError, AttributeError):
-                pass
-            else:
-                self.lookup_field = 'uuid'
-                kwargs['uuid'] = kwargs['pk']
         return super(ProductViewSet, self).dispatch(*args, **kwargs)
 
     def list(self, request):
@@ -65,6 +55,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     queryset = rules.Product.objects.all()
     serializer_class = serializer.ProductSerializer
+    lookup_field = 'uuid'
 
 
 class PropertyViewSet(viewsets.ModelViewSet):
