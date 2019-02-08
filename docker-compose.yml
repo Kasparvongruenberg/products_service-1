@@ -28,7 +28,7 @@ services:
     volumes:
       - .:/code
     ports:
-      - "8080:8080"
+      - "8086:8080"
     depends_on:
       - postgres_products_service
     environment:

@@ -1,3 +1,5 @@
+import uuid
+
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import CursorPagination, PageNumberPagination
@@ -42,6 +44,15 @@ class ProductViewSet(viewsets.ModelViewSet):
     # Remove CSRF request verification for posts to this API
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
+        if 'pk' in kwargs:
+            # check if URL argument either ID or UUID
+            try:
+                uuid.UUID(kwargs['pk'], version=4)
+            except (ValueError, AttributeError):
+                pass
+            else:
+                self.lookup_field = 'uuid'
+                kwargs['uuid'] = kwargs['pk']
         return super(ProductViewSet, self).dispatch(*args, **kwargs)
 
     def list(self, request):

@@ -15,6 +15,7 @@ TEST_TYPE = 'test type'
 TEST_WF2 = str(uuid.uuid4())
 
 
+# ---------------- Fixtures ---------------------
 @pytest.fixture
 def api_rf():
     return APIRequestFactory()
@@ -34,6 +35,7 @@ def products():
     ]
 
 
+# ---------------- Tests ---------------------
 @pytest.mark.django_db()
 def test_products_list_empty(api_rf, user):
     request = api_rf.get('')
@@ -99,3 +101,27 @@ def test_products_empty_filter(api_rf, user, products):
     response = ProductViewSet.as_view({'get': 'list'})(request)
     assert response.status_code == 200
     assert len(response.data) == 0
+
+
+@pytest.mark.django_db()
+def test_product_detail_by_uuid(api_rf, user):
+    product = model_factories.ProductFactory.create()
+
+    request = api_rf.get('')
+    request.user = user
+    response = ProductViewSet.as_view({'get': 'retrieve'})(request,  pk=str(product.uuid))  # noqa
+    assert response.status_code == 200
+    assert response.data
+
+    assert response.data['id'] == product.pk
+    assert response.data['uuid'] == str(product.uuid)
+    assert 'name' in response.data
+    assert 'workflowlevel2_uuid' in response.data
+
+
+@pytest.mark.django_db()
+def test_nonexistent_product_by_uuid(api_rf, user):
+    request = api_rf.get('')
+    request.user = user
+    response = ProductViewSet.as_view({'get': 'retrieve'})(request, pk='e70d4613-2055-4c95-9815-ea2f07210d55')  # noqa
+    assert response.status_code == 404

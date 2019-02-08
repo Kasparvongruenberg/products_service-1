@@ -15,83 +15,6 @@ class ProductViewsBaseTest(TestCase):
         self.user = model_factories.User()
 
 
-class ProductListTest(ProductViewsBaseTest):
-
-    def test_products_list_empty(self):
-        request = self.factory.get('')
-        request.user = self.user
-        response = ProductViewSet.as_view({'get': 'list'})(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, [])
-
-    def test_products_list(self):
-        model_factories.ProductFactory.create_batch(3)
-
-        request = self.factory.get('')
-        request.user = self.user
-        response = ProductViewSet.as_view({'get': 'list'})(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 3)
-
-        product_data = response.data[0]
-        self.assertTrue('id' in product_data)
-        self.assertTrue('name' in product_data)
-
-    def test_products_list_with_name_filter(self):
-        test_type = 'test type'
-        model_factories.ProductFactory.create(type=test_type)
-
-        request = self.factory.get('?type={}'.format(test_type))
-        request.user = self.user
-        response = ProductViewSet.as_view({'get': 'list'})(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-
-        product_data = response.data[0]
-        self.assertTrue('id' in product_data)
-        self.assertTrue('name' in product_data)
-        self.assertTrue('type' in product_data)
-        self.assertEqual(product_data['type'], test_type)
-
-    def test_products_list_with_wf2_filter(self):
-        test_wf2 = str(uuid.uuid4())
-        model_factories.ProductFactory.create(workflowlevel2_uuid=test_wf2)
-
-        request = self.factory.get('?workflowlevel2_uuid={}'.format(test_wf2))
-        request.user = self.user
-        response = ProductViewSet.as_view({'get': 'list'})(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-
-        product_data = response.data[0]
-        self.assertTrue('id' in product_data)
-        self.assertTrue('name' in product_data)
-        self.assertTrue('workflowlevel2_uuid' in product_data)
-        self.assertEqual(product_data['workflowlevel2_uuid'], test_wf2)
-
-    def test_products_empty_filter(self):
-        request = self.factory.get('?type={}'.format('nonexistent'))
-        request.user = self.user
-        response = ProductViewSet.as_view({'get': 'list'})(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 0)
-
-        request = self.factory.get('?workflowlevel2_uuid={}'
-                                   .format('nonexistent'))
-        request.user = self.user
-        response = ProductViewSet.as_view({'get': 'list'})(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 0)
-
-    def test_property_list_empty(self):
-        request = self.factory.get('')
-        request.user = self.user
-        view = PropertyViewSet.as_view({'get': 'list'})
-        response = view(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, [])
-
-
 class ProductDetailTest(ProductViewsBaseTest):
 
     def test_product_detail(self):
@@ -210,6 +133,14 @@ class PropertyListTest(ProductViewsBaseTest):
                 self.assertEqual(len(prop_data['product']), 1)
             elif prop_data['id'] == prop3.pk:
                 self.assertEqual(len(prop_data['product']), 2)
+
+    def test_property_list_empty(self):
+        request = self.factory.get('')
+        request.user = self.user
+        view = PropertyViewSet.as_view({'get': 'list'})
+        response = view(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, [])
 
 
 class PropertyDetailTest(ProductViewsBaseTest):
