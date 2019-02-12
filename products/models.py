@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 
@@ -5,6 +7,7 @@ class Product(models.Model):
     """
     Model for product
     """
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     workflowlevel2_uuid = models.CharField(max_length=255,
                                            verbose_name='WorkflowLevel2 UUID',
                                            blank=True,

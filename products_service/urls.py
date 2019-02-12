@@ -38,7 +38,6 @@ router = routers.SimpleRouter()
 
 router.register(r'products', views.ProductViewSet)
 router.register(r'property', views.PropertyViewSet)
-router.register(r'groups', views.ProductViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
