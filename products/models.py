@@ -1,6 +1,15 @@
 import uuid
+from functools import partial
 
 from django.db import models
+from django.utils import timezone
+
+
+def make_filepath(filename):
+    now = timezone.now()
+    new_filename = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
+    filepath = "uploads/%s-%s/%s/" % (now.year, now.month, now.day)
+    return filepath+new_filename
 
 
 class Product(models.Model):
@@ -30,6 +39,7 @@ class Product(models.Model):
                                    blank=True, null=True)
     type = models.CharField(max_length=255, blank=True, null=True,
                             help_text="Type of product")
+    file = models.FileField(upload_to=make_filepath, null=True, blank=True)
     status = models.CharField(max_length=255, blank=True, null=True,
                               help_text="Status of Product (in-stock, "
                                         "on back order etc.) ")
