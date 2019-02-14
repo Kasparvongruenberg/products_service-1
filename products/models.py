@@ -5,7 +5,7 @@ from django.db import models
 from django.utils import timezone
 
 
-def make_filepath(filename):
+def make_filepath(instance, filename):
     now = timezone.now()
     new_filename = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
     filepath = "uploads/%s-%s/%s/" % (now.year, now.month, now.day)
@@ -40,6 +40,8 @@ class Product(models.Model):
     type = models.CharField(max_length=255, blank=True, null=True,
                             help_text="Type of product")
     file = models.FileField(upload_to=make_filepath, null=True, blank=True)
+    file_name = models.CharField(max_length=50, null=True, blank=True,
+                                 help_text='Filename')
     status = models.CharField(max_length=255, blank=True, null=True,
                               help_text="Status of Product (in-stock, "
                                         "on back order etc.) ")

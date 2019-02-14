@@ -48,3 +48,6 @@ services:
         qhqvJu1hKPYn9HYd75c0gIDYHJ9lb7QwQvg44aO27104rDK0xSstzL0CAwEAAQ==
         -----END PUBLIC KEY-----
       SECRET_KEY: "oxcdb=mtcc7q1cym@oox(lyrz1ncz-(w+(#&u7l-&)7a8wvxyz"
+      AWS_ACCESS_KEY_ID: example
+      AWS_SECRET_ACCESS_KEY: example
+      AWS_STORAGE_BUCKET_NAME : example
