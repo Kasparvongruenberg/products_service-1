@@ -5,6 +5,7 @@ export DATABASE_ENGINE=postgresql
 export DATABASE_NAME=nothing
 export DATABASE_PORT=nothing
 export DATABASE_USER=nothing
+export SECRET_KEY=nothing
 
 pip install -r requirements/base.txt
 python manage.py collectstatic --no-input

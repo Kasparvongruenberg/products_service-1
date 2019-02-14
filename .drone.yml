@@ -21,6 +21,7 @@ pipeline:
       - DATABASE_HOST=postgres
       - DATABASE_PORT=5432
       - DJANGO_SETTINGS_MODULE=products_service.settings.base
+      - SECRET_KEY=nothing
     when:
       event: [pull_request, push, tag]
 
