@@ -1,5 +1,4 @@
 import uuid
-from functools import partial
 
 from django.db import models
 from django.utils import timezone

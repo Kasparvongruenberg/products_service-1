@@ -14,8 +14,8 @@ class ProductSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        file_data = validated_data['file']
-        if file_data and not validated_data['file_name']:
+        file_data = validated_data.get('file')
+        if file_data and not validated_data.get('file_name'):
             validated_data['file_name'] = file_data.name
         return super().create(validated_data)
 
