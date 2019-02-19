@@ -1,9 +1,12 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import CursorPagination, PageNumberPagination
+from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 import django_filters
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.http import FileResponse
 
 from . import models as rules
 from . import serializer
@@ -50,6 +53,20 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['GET'])
+    def file(self, request, *args, **kwargs):
+        product = self.get_object()
+
+        if not product.file:
+            return NotFound(detail='The product has no file')
+
+        response = FileResponse(product.file)
+        response['Content-Disposition'] = \
+            'attachment; filename=%s' % product.file_name
+        response['Content-Length'] = product.file.size
+
+        return response
 
     filter_fields = ('type', 'name', 'workflowlevel2_uuid')
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)

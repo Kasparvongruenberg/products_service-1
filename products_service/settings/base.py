@@ -44,6 +44,7 @@ INSTALLED_APPS_THIRD_PARTIES = [
     'rest_framework.authtoken',
     'django_filters',
     'drf_yasg',
+    'storages',
 
     # Health check
     'health_check',
@@ -165,3 +166,14 @@ JWT_ALLOWED_ISSUER = 'bifrost'
 JWT_PUBLIC_KEY_RSA_BIFROST = os.getenv('JWT_PUBLIC_KEY_RSA_BIFROST')
 
 API_URL = os.getenv('API_URL')
+
+MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'media'))
+
+MEDIA_URL = '/media/'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY_SECRET')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_SECURE_URLS = True
+AWS_DEFAULT_ACL = None

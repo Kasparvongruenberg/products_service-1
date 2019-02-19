@@ -14,6 +14,9 @@ pipeline:
       - bash scripts/tcp-port-wait.sh $${DATABASE_HOST} $${DATABASE_PORT}
       - bash scripts/run-tests.sh --ci
     environment:
+      - AWS_ACCESS_KEY_ID=example
+      - AWS_SECRET_ACCESS_KEY=example
+      - AWS_STORAGE_BUCKET_NAME=example
       - DATABASE_ENGINE=postgresql
       - DATABASE_NAME=db
       - DATABASE_USER=root

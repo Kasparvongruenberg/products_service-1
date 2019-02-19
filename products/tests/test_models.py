@@ -1,12 +1,18 @@
 import uuid
 
-from django.test import TestCase
+import pytest
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
+import boto3
+from moto import mock_s3
 
 from ..models import Product, Property
 
 
-class ProductTest(TestCase):
+@mock_s3
+@pytest.mark.django_db()
+class TestProductModule:
 
     def test_product_with_required_fields_save(self):
         product = Product(
@@ -17,8 +23,8 @@ class ProductTest(TestCase):
         product.save()
 
         product_saved = Product.objects.get(pk=product.pk)
-        self.assertEqual(product, product_saved)
-        self.assertEqual(str(product), str(product_saved))
+        assert product == product_saved
+        assert str(product) == str(product_saved)
 
     def test_product_with_all_fields_save(self):
         product = Product(
@@ -36,14 +42,33 @@ class ProductTest(TestCase):
         product.save()
 
         product_saved = Product.objects.get(pk=product.pk)
-        self.assertEqual(product, product_saved)
-        self.assertEqual(str(product), str(product_saved))
+        assert product == product_saved
+        assert str(product) == str(product_saved)
+
+    def test_product_with_file_save(self):
+        conn = boto3.resource('s3', region_name='us-east-1')
+        conn.create_bucket(Bucket=settings.AWS_STORAGE_BUCKET_NAME)
+        file_mock = SimpleUploadedFile('test1.pdf', b'some content')
+        product = Product(
+            workflowlevel2_uuid=uuid.uuid4,
+            name='Product 1',
+            file=file_mock,
+            file_name='foo.pdf',
+        )
+        product.full_clean()
+        product.save()
+
+        product_saved = Product.objects.get(pk=product.pk)
+        assert product == product_saved
+        assert str(product) == str(product_saved)
+        assert product.file
+        assert product.file_name == 'foo.pdf'
 
     def test_product_validation_failed(self):
         product = Product(
             workflowlevel2_uuid=uuid.uuid4
         )
-        with self.assertRaises(ValidationError):
+        with pytest.raises(ValidationError):
             product.full_clean()
 
     def test_product_properties_creation(self):
@@ -56,10 +81,10 @@ class ProductTest(TestCase):
         property2 = Property.objects.create(name='Size', value='L')
         product.property_set.add(property1, property2)
 
-        property_saved = Property.objects.get(pk=product.pk)
-        self.assertEqual(property1, property_saved)
-        self.assertEqual(str(property1), str(property_saved))
+        property_saved = Property.objects.get(pk=property1.pk)
+        assert property1 == property_saved
+        assert str(property1) == str(property_saved)
 
         properties = Product.objects.get(pk=product.pk).property_set.all()
-        self.assertIn(property1, properties)
-        self.assertIn(property2, properties)
+        assert property1 in properties
+        assert property2 in properties
