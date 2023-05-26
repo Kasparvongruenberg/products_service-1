@@ -1,4 +1,4 @@
-FROM nginx:stable-alpine
+FROM nginx:mainline-alpine
 
 # In order to make this work, we need to collect before all static files in the
 # project's dir.
